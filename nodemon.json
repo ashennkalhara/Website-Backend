@@ -1,0 +1,7 @@
+{
+    "watch": ["api", "models", "routes", "controllers"],
+    "ext": "js,json",
+    "ignore": ["node_modules"],
+    "exec": "node api/index.js"
+  }
+  
