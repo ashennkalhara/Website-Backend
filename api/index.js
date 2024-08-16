@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from '../routes/authRoutes.js';
-import Reservation from '../models/Reservation.js';
+import reservationRoutes from '../routes/resRoutes.js';
+import galleryRoutes from '../routes/galleryRoutes.js'; // Import gallery routes
 
 dotenv.config();
 
@@ -25,33 +26,17 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Serve static files from the 'public/uploads' directory
+app.use('/uploads', express.static('public/uploads'));
+
 // Routes
 app.get('/', (req, res) => {
     res.send('Welcome to the API');
 });
 
 app.use('/api/auth', authRoutes);
-
-// Create a reservation
-app.post('/reservations', async (req, res) => {
-    try {
-        const reservation = new Reservation(req.body);
-        await reservation.save();
-        res.status(201).send(reservation);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-});
-
-// Get all reservations
-app.get('/reservations', async (req, res) => {
-    try {
-        const reservations = await Reservation.find();
-        res.status(200).send(reservations);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-});
+app.use('/reservations', reservationRoutes);
+app.use('/gallery', galleryRoutes); // Use gallery routes
 
 const PORT = process.env.PORT || 3001;
 
