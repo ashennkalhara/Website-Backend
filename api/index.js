@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from '../routes/authRoutes.js';
 import reservationRoutes from '../routes/resRoutes.js';
-import galleryRoutes from '../routes/galleryRoutes.js'; // Import gallery routes
+import galleryRoutes from '../routes/galleryRoutes.js';
+import offerRoutes from '../routes/offerRoutes.js'; // Ensure this route file exists
 
 dotenv.config();
 
@@ -23,8 +24,8 @@ mongoose.connect(process.env.MONGO_CONNECTION, {
 const app = express();
 
 // Middleware
-app.use(express.json());
-app.use(cors());
+app.use(express.json()); // Parses incoming JSON requests
+app.use(cors()); // Enables Cross-Origin Resource Sharing
 
 // Serve static files from the 'public/uploads' directory
 app.use('/uploads', express.static('public/uploads'));
@@ -34,9 +35,10 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API');
 });
 
-app.use('/api/auth', authRoutes);
-app.use('/reservations', reservationRoutes);
-app.use('/gallery', galleryRoutes); // Use gallery routes
+app.use('/api/auth', authRoutes); // Authentication routes
+app.use('/reservations', reservationRoutes); // Reservation routes
+app.use('/gallery', galleryRoutes); // Gallery management routes
+app.use('/api/offers', offerRoutes); // Offer management routes
 
 const PORT = process.env.PORT || 3001;
 
