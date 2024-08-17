@@ -6,8 +6,9 @@ import authRoutes from '../routes/authRoutes.js';
 import reservationRoutes from '../routes/resRoutes.js';
 import galleryRoutes from '../routes/galleryRoutes.js';
 import offerRoutes from '../routes/offerRoutes.js';
-import foodRoutes from '../routes/foodRoutes.js'; // Import food routes
-import paymentRoutes from '../routes/paymentRoutes.js'
+import foodRoutes from '../routes/foodRoutes.js' // Import food routes
+import paymentRoutes from '../routes/paymentRoutes.js';
+import queryRoutes from '../routes/queryRoutes.js';
 import path from 'path';
 
 dotenv.config();
@@ -43,8 +44,11 @@ app.use('/api/auth', authRoutes); // Authentication routes
 app.use('/reservations', reservationRoutes); // Reservation routes
 app.use('/gallery', galleryRoutes); // Gallery management routes
 app.use('/api/offers', offerRoutes); // Offer management routes
-app.use('/api/foods', foodRoutes); // Food management routes
+app.use('/api/foods', foodRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/queries', queryRoutes);
+app.use('/uploads', express.static('public/uploads'));
+
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
