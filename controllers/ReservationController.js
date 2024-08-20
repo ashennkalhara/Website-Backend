@@ -1,4 +1,3 @@
-// controllers/ReservationController.js
 import Reservation from '../models/Reservation.js';
 
 // Create a reservation

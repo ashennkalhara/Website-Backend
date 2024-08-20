@@ -1,4 +1,3 @@
-// routes/queryRoutes.js
 import express from 'express';
 import { saveQuery, getAllQueries } from '../controllers/queryController.js';
 

@@ -1,4 +1,3 @@
-// controllers/queryController.js
 import Query from '../models/QueryModel.js';
 
 // Save a new query

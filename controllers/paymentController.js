@@ -13,9 +13,9 @@ export const processPayment = async (req, res) => {
             name,
             items,
             total,
-            cardNumber, // Sensitive information - consider encrypting
+            cardNumber, 
             expiryDate,
-            cvv // Sensitive information - consider encrypting
+            cvv 
         });
 
         await payment.save();

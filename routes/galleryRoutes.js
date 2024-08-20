@@ -4,7 +4,6 @@ import path from 'path';
 import fs from 'fs';
 import { uploadImage, getAllImages, deleteImage } from '../controllers/galleryController.js';
 
-// Set up Multer storage configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadDir = path.join('public', 'uploads'); 
