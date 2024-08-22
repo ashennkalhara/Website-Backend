@@ -2,15 +2,28 @@ import Staff from '../models/staffModel.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+// Register a new staff member
 export const registerStaff = async (req, res) => {
   const { name, email, password } = req.body;
+
   try {
+    // Check if the staff member already exists
     const staffExists = await Staff.findOne({ email });
     if (staffExists) {
       return res.status(400).json({ message: 'Staff already exists' });
     }
 
-    const staff = new Staff({ name, email, password });
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Create a new staff member
+    const staff = new Staff({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    // Save the staff member to the database
     const savedStaff = await staff.save();
 
     res.status(201).json({
@@ -23,19 +36,24 @@ export const registerStaff = async (req, res) => {
   }
 };
 
+// Login a staff member
 export const loginStaff = async (req, res) => {
   const { email, password } = req.body;
+
   try {
+    // Find the staff member by email
     const staff = await Staff.findOne({ email });
     if (!staff) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
+    // Compare the provided password with the stored hashed password
     const isMatch = await bcrypt.compare(password, staff.password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
+    // Generate a JWT token for the staff member
     const token = jwt.sign({ _id: staff._id }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
@@ -53,11 +71,29 @@ export const loginStaff = async (req, res) => {
   }
 };
 
+// Get the list of all staff members
 export const getStaffList = async (req, res) => {
   try {
+    // Retrieve all staff members, excluding their passwords
     const staffList = await Staff.find().select('-password');
     res.json(staffList);
   } catch (error) {
     res.status(500).json({ message: 'Failed to retrieve staff list' });
+  }
+};
+
+export const deleteStaff = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedStaff = await Staff.findByIdAndDelete(id);
+
+    if (!deletedStaff) {
+      return res.status(404).json({ message: 'Staff not found' });
+    }
+
+    res.status(200).json({ message: 'Staff deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to delete staff' });
   }
 };
