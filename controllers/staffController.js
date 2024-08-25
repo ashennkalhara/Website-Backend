@@ -13,17 +13,8 @@ export const registerStaff = async (req, res) => {
       return res.status(400).json({ message: 'Staff already exists' });
     }
 
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    // Create a new staff member
-    const staff = new Staff({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    // Save the staff member to the database
+    // Create and save the new staff member
+    const staff = new Staff({ name, email, password });
     const savedStaff = await staff.save();
 
     res.status(201).json({
@@ -54,9 +45,7 @@ export const loginStaff = async (req, res) => {
     }
 
     // Generate a JWT token for the staff member
-    const token = jwt.sign({ _id: staff._id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
-    });
+    const token = jwt.sign({ _id: staff._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     res.json({
       token,
@@ -74,14 +63,14 @@ export const loginStaff = async (req, res) => {
 // Get the list of all staff members
 export const getStaffList = async (req, res) => {
   try {
-    // Retrieve all staff members, excluding their passwords
-    const staffList = await Staff.find().select('-password');
+    const staffList = await Staff.find().select('-password'); // Exclude passwords from the result
     res.json(staffList);
   } catch (error) {
     res.status(500).json({ message: 'Failed to retrieve staff list' });
   }
 };
 
+// Delete a staff member by ID
 export const deleteStaff = async (req, res) => {
   const { id } = req.params;
 
