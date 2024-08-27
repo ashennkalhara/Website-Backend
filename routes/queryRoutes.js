@@ -1,5 +1,5 @@
 import express from 'express';
-import { saveQuery, getAllQueries } from '../controllers/queryController.js';
+import { saveQuery, getAllQueries, replyToQuery } from '../controllers/queryController.js';
 
 const router = express.Router();
 
@@ -8,5 +8,8 @@ router.post('/save', saveQuery);
 
 // Route to get all queries
 router.get('/all', getAllQueries);
+
+// Route to reply to a query
+router.post('/reply', replyToQuery);
 
 export default router;
