@@ -2,7 +2,7 @@ import Payment from '../models/Payment.js';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 
-dotenv.config(); 
+dotenv.config();
 
 export const processPayment = async (req, res) => {
     try {
@@ -16,11 +16,11 @@ export const processPayment = async (req, res) => {
             name,
             items,
             total,
-            cardNumber, 
+            cardNumber,
             expiryDate,
             cvv,
-            email,  
-            status: 'Pending' 
+            email,
+            status: 'Pending'
         });
 
         await payment.save();
@@ -36,7 +36,7 @@ export const processPayment = async (req, res) => {
 
 export const getPayments = async (req, res) => {
     try {
-        const payments = await Payment.find(); 
+        const payments = await Payment.find();
         res.json(payments);
     } catch (error) {
         console.error('Error fetching payments:', error.message);
@@ -89,15 +89,15 @@ export const markOrderAsReady = async (req, res) => {
 
 const sendEmail = async (to, subject, text) => {
     const transporter = nodemailer.createTransport({
-        service: 'gmail', 
+        service: 'gmail',
         auth: {
-            user: process.env.EMAIL_ADDRESS, 
-            pass: process.env.EMAIL_APP_PASS 
+            user: process.env.EMAIL_ADDRESS,
+            pass: process.env.EMAIL_APP_PASS
         }
     });
 
     const mailOptions = {
-        from: process.env.EMAIL_ADDRESS, 
+        from: process.env.EMAIL_ADDRESS,
         to,
         subject,
         text
@@ -108,6 +108,27 @@ const sendEmail = async (to, subject, text) => {
         console.log('Email sent successfully');
     } catch (error) {
         console.error('Error sending email:', error.message);
-        throw error; 
+        throw error;
     }
 };
+
+export const getCount = async (req, res) => {
+    try {
+        const pendingCount = await Payment.countDocuments({ status: 'Pending' });
+        const confirmedCount = await Payment.countDocuments({ status: 'Confirmed' });
+        const readyCount = await Payment.countDocuments({ status: 'Ready' });
+
+        res.status(200).json({
+            pending: pendingCount,
+            confirmed: confirmedCount,
+            ready: readyCount,
+            total: pendingCount + confirmedCount + readyCount
+        });
+    } catch (error) {
+        console.error('Error fetching order counts:', error.message);
+        res.status(500).json({ error: 'Error fetching order counts', details: error.message });
+    }
+};
+
+
+

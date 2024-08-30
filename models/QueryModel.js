@@ -13,11 +13,11 @@ const querySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  replied: {
+    type: Boolean,
+    default: false,
   },
-});
+}, { timestamps: true });
 
 const Query = mongoose.model('Query', querySchema);
 

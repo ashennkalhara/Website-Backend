@@ -56,9 +56,23 @@ export const replyToQuery = async (req, res) => {
 
     await transporter.sendMail(mailOptions);
 
+    await Query.findOneAndUpdate({ email }, { replied: true });
+
     res.status(200).json({ message: 'Reply sent successfully' });
   } catch (error) {
     console.error('Error sending reply:', error.message);
     res.status(500).json({ error: 'Error sending reply', details: error.message });
+  }
+};
+
+export const getQueryCounts = async (req, res) => {
+  try {
+    const repliedCount = await Query.countDocuments({ replied: true });
+    const pendingCount = await Query.countDocuments({ replied: false });
+
+    res.status(200).json({ repliedCount, pendingCount });
+  } catch (error) {
+    console.error('Error fetching query counts:', error.message);
+    res.status(500).json({ error: 'Error fetching query counts', details: error.message });
   }
 };
