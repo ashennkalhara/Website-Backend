@@ -86,3 +86,12 @@ export const deleteStaff = async (req, res) => {
     res.status(500).json({ message: 'Failed to delete staff' });
   }
 };
+
+export const getStaffCount = async (req, res) => {
+  try {
+    const staffCount = await Staff.countDocuments();
+    res.status(200).json({ total: staffCount });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to retrieve staff count' });
+  }
+};

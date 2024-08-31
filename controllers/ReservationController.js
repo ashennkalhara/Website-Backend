@@ -57,3 +57,15 @@ export const updateStatus = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
+export const getResCounts = async (req, res) => {
+    try {
+        const acceptedCount = await Reservation.countDocuments({ status: 'Approved' });
+        const rejectedCount = await Reservation.countDocuments({ status: 'Rejected' });
+
+        res.status(200).json({ acceptedCount, rejectedCount });
+    } catch (error) {
+        console.error('Error fetching reservation counts:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};

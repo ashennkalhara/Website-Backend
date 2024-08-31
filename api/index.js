@@ -14,17 +14,14 @@ import path from 'path';
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO_CONNECTION, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => {
-    console.log('Connected to MongoDB');
-})
-.catch((err) => {
-    console.error('Failed to connect to MongoDB', err);
-    process.exit(1); 
-});
+mongoose.connect(process.env.MONGO_CONNECTION)
+    .then(() => {
+        console.log('Connected to MongoDB');
+    })
+    .catch((err) => {
+        console.error('Failed to connect to MongoDB', err);
+        process.exit(1); 
+    });
 
 const app = express();
 
@@ -38,7 +35,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes); 
-app.use('/reservations', reservationRoutes); 
+app.use('/api/reservations', reservationRoutes); 
 app.use('/gallery', galleryRoutes); 
 app.use('/api/offers', offerRoutes); 
 app.use('/api/foods', foodRoutes);
