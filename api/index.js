@@ -35,7 +35,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes); 
-app.use('/reservations', reservationRoutes); 
+app.use('/api/reservations', reservationRoutes); 
 app.use('/gallery', galleryRoutes); 
 app.use('/api/offers', offerRoutes); 
 app.use('/api/foods', foodRoutes);
