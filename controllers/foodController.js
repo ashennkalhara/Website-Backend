@@ -11,12 +11,11 @@ export const addFood = async (req, res) => {
         const newFood = new Food({ name, price, image });
         const savedFood = await newFood.save();
         res.status(201).json(savedFood);
-        return; // Add return statement here
+        return; 
     } catch (error) {
         res.status(500).json({ error: 'Failed to add food' });
     }
 };
-
 
 // Get all food items
 export const getFoods = async (req, res) => {

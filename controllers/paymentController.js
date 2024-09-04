@@ -56,7 +56,7 @@ export const confirmPayment = async (req, res) => {
         payment.status = 'Confirmed';
         await payment.save();
 
-        await sendEmail(payment.email, 'Payment Confirmed', `Dear ${payment.name}, your payment of Rs.${payment.total.toFixed(2)} has been confirmed. Your order will be ready soon.`);
+        await sendEmail(payment.email, 'Order Confirmed', `Dear ${payment.name}, your payment of Rs.${payment.total.toFixed(2)} has been confirmed. Your order will be ready soon.`);
 
         res.status(200).json({ message: 'Payment confirmed and email sent', payment });
     } catch (error) {
